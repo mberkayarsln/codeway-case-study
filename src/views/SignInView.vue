@@ -7,6 +7,8 @@
 
             <p class="signin-prompt">Please sign in</p>
 
+            <p v-if="errorMessage" style="color: var(--text-error); margin-bottom: 1rem;">{{ errorMessage }}</p>
+
             <form @submit.prevent="handleSignIn" class="signin-form">
                 <div class="input-wrapper email-input">
                     <input type="email" v-model="email" placeholder="E-mail address" required />
@@ -16,7 +18,10 @@
                     <input type="password" v-model="password" placeholder="Password" required />
                 </div>
 
-                <button type="submit" class="signin-button">Sign in</button>
+                <button type="submit" class="signin-button" :disabled="isLoading">
+                    <span v-if="isLoading">Signing in...</span>
+                    <span v-else>Sign in</span>
+                </button>
             </form>
         </div>
 
@@ -28,13 +33,40 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from "@/firebase";
 
 const email = ref('');
 const password = ref('');
+const errorMessage = ref('');
+const isLoading = ref(false);
 
-const handleSignIn = () => {
-    console.log('Email:', email.value);
-    console.log('Password:', password.value);
+const router = useRouter();
+
+const handleSignIn = async () => {
+    errorMessage.value = "";
+    isLoading.value = true;
+
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email.value, password.value);
+        console.log('Logged in successfully:', userCredential.user.email);
+
+        router.push('/');
+    }
+    catch (error: any) {
+        console.error('Login failed:', error.message);
+
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+            errorMessage.value = 'Invalid email or password.';
+        } else {
+            errorMessage.value = 'Failed to sign in. Please try again later.';
+        }
+    }
+    finally {
+        isLoading.value = false;
+    }
+
 };
 </script>
 

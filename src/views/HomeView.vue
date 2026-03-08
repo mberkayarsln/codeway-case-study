@@ -1,14 +1,21 @@
 <template>
-    <div class="home-container">
-        <h1>Welcome to the Home Page!</h1>
-        <p>This is the home page of your Vue.js application.</p>
+    <Navbar />
+    <div class="home-wrapper">
+        <div class="home-content">
+            <Table />
+        </div>
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Navbar from '@/components/Navbar.vue';
+import Table from '@/components/Table.vue';
+
+</script>
 
 <style scoped>
-.home-container {
-    padding: 2rem;
+.home-wrapper {
+    height: 100vh;
+    padding: 1rem 2rem;
 }
 </style>

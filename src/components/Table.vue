@@ -1,5 +1,5 @@
 <template>
-        <table class="table">
+    <table class="table">
         <thead>
             <tr>
                 <th class="table-header">Parameter Key</th>
@@ -55,48 +55,53 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Button from './Button.vue';
+import { fetchWithAuth } from '@/services/api';
 
-const parameters = ref([
-    {
-        key: 'min_version',
-        value: '1.4.4',
-        description: 'Minimum required version of the app',
-        createDate: '10/05/2021 01:58'
-    },
-    {
-        key: 'latest_version',
-        value: '1.4.7',
-        description: 'Latest version of the app',
-        createDate: '10/05/2021 01:58'
-    },
-    {
-        key: 'pricing_tier',
-        value: 't6',
-        description: 'Pricing tier of the user',
-        createDate: '07/07/2021 11:13'
+interface Parameter {
+    key: string;
+    value: string;
+    description: string;
+    createDate: string;
+}
+
+const parameters = ref<Parameter[]>([]);
+
+const loadParameters = async () => {
+    try {
+        const data = await fetchWithAuth("/api/parameters");
+        parameters.value = data.parameters || [];
+    } catch (error) {
+        console.error('Failed to load parameters:', error);
     }
-]);
+};
+
+onMounted(() => {
+    loadParameters();
+});
+
 </script>
 
 
 <style scoped>
-
 .cards {
     display: none;
 }
 
-th, td {
-  padding: 10px 20px;
+th,
+td {
+    padding: 10px 20px;
 }
 
-th:first-child, td:first-child {
-  padding-left: 0;
+th:first-child,
+td:first-child {
+    padding-left: 0;
 }
 
-th:last-child, td:last-child {
-  padding-right: 0;
+th:last-child,
+td:last-child {
+    padding-right: 0;
 }
 
 .table {
@@ -160,6 +165,7 @@ th:last-child, td:last-child {
     .table {
         display: none;
     }
+
     .cards {
         display: flex;
         flex-direction: column;

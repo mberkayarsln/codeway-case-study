@@ -1,5 +1,5 @@
 <template>
-    <table class="table">
+        <table class="table">
         <thead>
             <tr>
                 <th class="table-header">Parameter Key</th>
@@ -39,6 +39,19 @@
             </tr>
         </tbody>
     </table>
+
+    <div class="cards">
+        <div class="card" v-for="parameter in parameters" :key="parameter.key">
+            <p class="card-row"><span class="card-label">Parameter Key:</span> {{ parameter.key }}</p>
+            <p class="card-row"><span class="card-label">Value:</span> {{ parameter.value }}</p>
+            <p class="card-row"><span class="card-label">Description:</span> {{ parameter.description }}</p>
+            <p class="card-row"><span class="card-label">Create Date:</span> {{ parameter.createDate }}</p>
+            <div class="card-actions">
+                <Button type="edit" />
+                <Button type="delete" />
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -69,6 +82,10 @@ const parameters = ref([
 
 
 <style scoped>
+
+.cards {
+    display: none;
+}
 
 th, td {
   padding: 10px 20px;
@@ -112,5 +129,41 @@ th:last-child, td:last-child {
 
 .table-input::placeholder {
     color: var(--text-placeholder);
+}
+
+.card {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-gray);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+}
+
+.card-row {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.card-label {
+    font-weight: 700;
+    color: var(--text-white);
+}
+
+.card-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+@media (max-width: 768px) {
+    .table {
+        display: none;
+    }
+    .cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
 }
 </style>

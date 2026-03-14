@@ -24,7 +24,10 @@ export const fetchWithAuth = async (endpoint: string, options: RequestInit = {})
     });
 
     if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+        throw {
+            message: `API request failed with status ${response.status}`,
+            status: response.status
+        };
     }
 
     return response.json();

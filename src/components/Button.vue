@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-type ButtonType = "edit" | "delete" | "add";
+type ButtonType = "edit" | "delete" | "add" | "save" | "cancel";
 
 const props = defineProps<{
     type: ButtonType;
@@ -21,6 +21,10 @@ const buttonText = computed(() => {
             return "Delete";
         case "add":
             return "ADD";
+        case "save":
+            return "Save";
+        case "cancel":
+            return "Cancel";
         default:
             return "Button";
     }
@@ -34,6 +38,10 @@ const buttonClass = computed(() => {
             return "delete-button";
         case "add":
             return "add-button";
+        case "save":
+            return "save-button";
+        case "cancel":
+            return "cancel-button";
         default:
             return "";
     }
@@ -57,11 +65,16 @@ const buttonClass = computed(() => {
     background: linear-gradient(to top right, var(--btn-blue-grad-start), var(--btn-blue-grad-end));
 }
 
-.delete-button {
+.delete-button,
+.cancel-button {
     background: linear-gradient(to top right, var(--btn-red-grad-start), var(--btn-red-grad-end));
 }
 
 .add-button {
     background: linear-gradient(to top right, var(--btn-turquoise-grad-start), var(--btn-turquoise-grad-end));
+}
+
+.save-button {
+    background: linear-gradient(to top right, var(--btn-green-grad-start), var(--btn-green-grad-end));
 }
 </style>
